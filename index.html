@@ -13,7 +13,6 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Hind Siliguri', sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background: var(--bg); color: #fff; overflow-x: hidden; position: relative; min-height: 100vh; }
 
-    /* পানির ফোঁটা (Water Ripple) ইফেক্ট */
     .water-drop {
       position: absolute;
       border: 2px solid rgba(255, 255, 255, 0.5);
@@ -27,26 +26,40 @@
       100% { width: 100px; height: 100px; opacity: 0; }
     }
 
-    /* অ্যাড লক স্ক্রিন */
     #lock-screen { position: fixed; inset: 0; z-index: 999999; background: #000; display: flex; justify-content: center; align-items: center; }
     .lock-box { background: #1c1c1e; padding: 40px; border-radius: 30px; text-align: center; width: 90%; max-width: 350px; border: 1px solid #333; }
     #ad-btn { background: #fff; color: #000; padding: 15px; width: 100%; border-radius: 15px; margin-top: 20px; font-weight: 800; border: none; cursor: pointer; }
 
-    /* মেইন সাইট */
     #main-site { display: none; padding-bottom: 100px; }
     header { padding: 40px 20px 20px; text-align: center; font-size: 2.2rem; font-weight: 800; color: #00E5FF; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 15px; }
-    .card { background: var(--card); border-radius: 18px; overflow: hidden; border: 1px solid #222; cursor: pointer; }
-    .thumb img { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
-    .card-info { padding: 12px; text-align: center; font-size: 0.95rem; font-weight: 600; }
+    
+    /* গ্রিড পরিবর্তন: এক লাইনে একটি ভিডিও */
+    .grid { display: grid; grid-template-columns: 1fr; gap: 20px; padding: 15px; }
+    
+    .card { background: var(--card); border-radius: 18px; overflow: hidden; border: 1px solid #222; cursor: pointer; position: relative; }
+    
+    /* এপিসোড নাম্বার স্টাইল */
+    .episode-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--red);
+      color: #fff;
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      z-index: 10;
+    }
 
-    /* ফ্লোটিং সোশ্যাল বাটন */
+    .thumb img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+    .card-info { padding: 15px; text-align: center; font-size: 1.1rem; font-weight: 600; }
+
     .float-container { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 9999; }
     .float-btn { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: 0.3s; }
     .fb-btn { background: #1877F2; }
     .tg-btn { background: #0088cc; }
 
-    /* পেমেন্ট পেজ */
     #payment-page { position: fixed; inset: 0; background: #080808; z-index: 20000; display: none; flex-direction: column; overflow-y: auto; padding: 25px; }
     .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
     .plan-item { border: 1px solid #333; padding: 15px; border-radius: 18px; text-align: center; cursor: pointer; transition: 0.3s; }
@@ -68,8 +81,8 @@
 <div id="lock-screen">
   <div class="lock-box">
     <h2>ভেরিফিকেশন</h2>
-    <p style="color:#aaa; margin: 10px 0;">৫টি অ্যাডে ক্লিক করলে সাইট খুলবে</p>
-    <h1 id="ads-count" style="font-size: 4.5rem; color: var(--primary);">৫</h1>
+    <p style="color:#aaa; margin: 10px 0;">১টি অ্যাডে ক্লিক করলে সাইট খুলবে</p>
+    <h1 id="ads-count" style="font-size: 4.5rem; color: var(--primary);">১</h1>
     <button id="ad-btn" onclick="handleLockAds()">ক্লিক করুন</button>
   </div>
 </div>
@@ -155,7 +168,6 @@
 
   const myAdLink = "https://www.effectivegatecpm.com/dqnkurcq7n?key=beabc9790eb2c61d16f29431ea6d5e4f";
 
-  // পানির ফোঁটা ইফেক্ট
   window.showWaterDrop = (e) => {
     let drop = document.createElement('span');
     drop.classList.add('water-drop');
@@ -165,8 +177,8 @@
     setTimeout(() => drop.remove(), 600);
   };
 
-  // লক স্ক্রিন অ্যাড লজিক
-  let lockAds = 5;
+  // অ্যাড ভেরিফিকেশন ৫ থেকে ১ করা হয়েছে
+  let lockAds = 1;
   window.handleLockAds = () => {
     window.open(myAdLink, "_blank");
     const btn = document.getElementById('ad-btn');
@@ -188,7 +200,6 @@
     }, 1000);
   };
 
-  // টু-ক্লিক ভিডিও অ্যাড লজিক
   let clickedVids = {};
   let currentVideoUrl = "";
   window.handleVideoClick = (id, url) => {
@@ -204,17 +215,17 @@
     }
   };
 
-  // ভিডিও লোড করা
+  // ভিডিও থাম্বনেইলে এপিসোড নাম্বার যুক্ত করা হয়েছে
   onSnapshot(query(collection(db, "videos"), orderBy("episodeNo", "asc")), (snap) => {
     document.getElementById("videoGrid").innerHTML = snap.docs.map(v => `
         <div class="card" onclick="handleVideoClick('${v.id}', '${v.data().url}')">
+            <div class="episode-badge">এপিসোড: ${v.data().episodeNo || '0'}</div>
             <div class="thumb"><img src="${v.data().thumb}"></div>
             <div class="card-info">${v.data().title}</div>
         </div>
     `).join('');
   });
 
-  // পেমেন্ট মেথড ও সেটিংস
   let activePlan = "১ মাস - ৪৪ টাকা";
   let activeMethod = "bkash";
   let adminNums = { bkash: '01795406380', nagad: '...', rocket: '...' };
@@ -246,19 +257,19 @@
     const trx = document.getElementById('uTrx').value;
     if(!ph || !trx) return alert("তথ্য দিন!");
     await addDoc(collection(db, "pending_payments"), { phone: ph, trx: trx, plan: activePlan, method: activeMethod, date: new Date().toLocaleString() });
-    alert("রিকোয়েস্ট পাঠানো হয়েছে!");
+    alert("রিকোয়েস্ট পাঠানো হয়েছে!");
   };
 
   window.verifyUnlock = async () => {
     const trx = document.getElementById('verifyTrx').value;
     const snap = await getDoc(doc(db, "approved_users", trx));
-    if(snap.exists()) { window.open(currentVideoUrl, '_blank'); } else { alert("পেমেন্ট এখনো এপ্রুভ হয়নি!"); }
+    if(snap.exists()) { window.open(currentVideoUrl, '_blank'); } else { alert("পেমেন্ট এখনো এপ্রুভ হয়নি!"); }
   };
 
   window.closePlayer = () => { document.getElementById('player-section').style.display='none'; document.getElementById('mainVideo').pause(); };
   window.openPayment = () => document.getElementById('payment-page').style.display='flex';
   window.closePayment = () => document.getElementById('payment-page').style.display='none';
-  window.copyNum = () => { navigator.clipboard.writeText(document.getElementById('targetNum').innerText); alert("নম্বর কপি হয়েছে!"); };
+  window.copyNum = () => { navigator.clipboard.writeText(document.getElementById('targetNum').innerText); alert("নম্বর কপি হয়েছে!"); };
 
   updatePayUI();
 </script>
