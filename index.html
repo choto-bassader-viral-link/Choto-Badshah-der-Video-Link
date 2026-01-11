@@ -31,14 +31,16 @@
     #ad-btn { background: #fff; color: #000; padding: 15px; width: 100%; border-radius: 15px; margin-top: 20px; font-weight: 800; border: none; cursor: pointer; }
 
     #main-site { display: none; padding-bottom: 100px; }
-    header { padding: 40px 20px 20px; text-align: center; font-size: 2.2rem; font-weight: 800; color: #00E5FF; }
+    header { padding: 40px 20px 10px; text-align: center; font-size: 2.2rem; font-weight: 800; color: #00E5FF; }
     
-    /* গ্রিড পরিবর্তন: এক লাইনে একটি ভিডিও */
+    /* সার্চ বক্স স্টাইল */
+    .search-container { padding: 0 15px 20px; }
+    .search-box { width: 100%; background: #1c1c1e; border: 1px solid #333; padding: 12px 20px; border-radius: 12px; color: #fff; font-size: 1rem; outline: none; transition: 0.3s; }
+    .search-box:focus { border-color: var(--primary); }
+
     .grid { display: grid; grid-template-columns: 1fr; gap: 20px; padding: 15px; }
-    
     .card { background: var(--card); border-radius: 18px; overflow: hidden; border: 1px solid #222; cursor: pointer; position: relative; }
     
-    /* এপিসোড নাম্বার স্টাইল */
     .episode-badge {
       position: absolute;
       top: 10px;
@@ -89,11 +91,16 @@
 
 <div class="float-container">
     <a href="https://facebook.com/yourlink" class="float-btn fb-btn" target="_blank"><i class="fab fa-facebook-f"></i></a>
-    <a href="https://t.me/yourlink" class="float-btn tg-btn" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+    <a href="https://t.me/moviecannelkoi" class="float-btn tg-btn" target="_blank"><i class="fab fa-telegram-plane"></i></a>
 </div>
 
 <div id="main-site">
   <header>বাচ্চাদের ভাইরাল লিংক</header>
+  
+  <div class="search-container">
+    <input type="text" id="searchInput" class="search-box" placeholder="ভিডিওর নাম দিয়ে সার্চ করুন..." onkeyup="filterVideos()">
+  </div>
+
   <div class="grid" id="videoGrid"></div>
 </div>
 
@@ -177,7 +184,6 @@
     setTimeout(() => drop.remove(), 600);
   };
 
-  // অ্যাড ভেরিফিকেশন ৫ থেকে ১ করা হয়েছে
   let lockAds = 1;
   window.handleLockAds = () => {
     window.open(myAdLink, "_blank");
@@ -215,7 +221,21 @@
     }
   };
 
-  // ভিডিও থাম্বনেইলে এপিসোড নাম্বার যুক্ত করা হয়েছে
+  // সার্চ ফাংশন
+  window.filterVideos = () => {
+    const input = document.getElementById('searchInput').value.toLowerCase();
+    const cards = document.getElementsByClassName('card');
+    
+    for (let card of cards) {
+      const title = card.querySelector('.card-info').innerText.toLowerCase();
+      if (title.includes(input)) {
+        card.style.display = "";
+      } else {
+        card.style.display = "none";
+      }
+    }
+  };
+
   onSnapshot(query(collection(db, "videos"), orderBy("episodeNo", "asc")), (snap) => {
     document.getElementById("videoGrid").innerHTML = snap.docs.map(v => `
         <div class="card" onclick="handleVideoClick('${v.id}', '${v.data().url}')">
