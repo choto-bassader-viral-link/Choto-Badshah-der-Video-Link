@@ -9,36 +9,49 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    :root { --primary: #007AFF; --bg: #050505; --card: rgba(28, 28, 30, 0.8); --gold: #FFD700; --red: #FF3B30; }
+    :root { --primary: #007AFF; --bg: #050505; --card: rgba(28, 28, 30, 0.9); --gold: #FFD700; --red: #FF3B30; }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Hind Siliguri', sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background: var(--bg); color: #fff; overflow-x: hidden; position: relative; min-height: 100vh; }
 
+    /* সম্পূর্ণ ব্যাকগ্রাউন্ডে হলুদ পার্টিকেলস */
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 0; /* সব কন্টেন্টের নিচে থাকবে */
+      background-color: #050505;
+    }
+
     .water-drop {
       position: absolute;
-      border: 2px solid rgba(255, 255, 255, 0.5);
+      border: 2px solid var(--gold);
       border-radius: 50%;
       pointer-events: none;
       transform: translate(-50%, -50%);
       animation: drop-animate 0.6s linear;
+      z-index: 9999999;
     }
     @keyframes drop-animate {
       0% { width: 0; height: 0; opacity: 1; }
       100% { width: 100px; height: 100px; opacity: 0; }
     }
 
-    #lock-screen { position: fixed; inset: 0; z-index: 999999; background: #000; display: flex; justify-content: center; align-items: center; }
-    .lock-box { background: #1c1c1e; padding: 40px; border-radius: 30px; text-align: center; width: 90%; max-width: 350px; border: 1px solid #333; }
-    #ad-btn { background: #fff; color: #000; padding: 15px; width: 100%; border-radius: 15px; margin-top: 20px; font-weight: 800; border: none; cursor: pointer; }
+    #lock-screen { position: fixed; inset: 0; z-index: 999999; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; }
+    .lock-box { background: rgba(28, 28, 30, 0.95); padding: 40px; border-radius: 30px; text-align: center; width: 90%; max-width: 350px; border: 1px solid var(--gold); position: relative; z-index: 1; box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); }
+    #ad-btn { background: var(--gold); color: #000; padding: 15px; width: 100%; border-radius: 15px; margin-top: 20px; font-weight: 800; border: none; cursor: pointer; }
 
-    #main-site { display: none; padding-bottom: 100px; }
-    header { padding: 40px 20px 10px; text-align: center; font-size: 2.2rem; font-weight: 800; color: #00E5FF; }
+    #main-site { display: none; padding-bottom: 100px; position: relative; z-index: 1; }
+    header { padding: 40px 20px 10px; text-align: center; font-size: 2.2rem; font-weight: 800; color: var(--gold); text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
     
     .search-container { padding: 0 15px 20px; }
-    .search-box { width: 100%; background: #1c1c1e; border: 1px solid #333; padding: 12px 20px; border-radius: 12px; color: #fff; font-size: 1rem; outline: none; transition: 0.3s; }
-    .search-box:focus { border-color: var(--primary); }
+    .search-box { width: 100%; background: rgba(28, 28, 30, 0.8); border: 1px solid #444; padding: 12px 20px; border-radius: 12px; color: #fff; font-size: 1rem; outline: none; transition: 0.3s; }
+    .search-box:focus { border-color: var(--gold); }
 
     .grid { display: grid; grid-template-columns: 1fr; gap: 20px; padding: 15px; }
-    .card { background: var(--card); border-radius: 18px; overflow: hidden; border: 1px solid #222; cursor: pointer; position: relative; }
+    .card { background: var(--card); border-radius: 18px; overflow: hidden; border: 1px solid #333; cursor: pointer; position: relative; transition: 0.3s; }
+    .card:hover { border-color: var(--gold); }
     
     .episode-badge {
       position: absolute;
@@ -54,7 +67,7 @@
     }
 
     .thumb img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
-    .card-info { padding: 15px; text-align: center; font-size: 1.1rem; font-weight: 600; }
+    .card-info { padding: 15px; text-align: center; font-size: 1.1rem; font-weight: 600; color: #fff; }
 
     .float-container { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 9999; }
     .float-btn { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: 0.3s; }
@@ -68,22 +81,24 @@
     
     .method-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
     .method-item { background: #1c1c1e; padding: 10px; border-radius: 15px; text-align: center; border: 2px solid transparent; cursor: pointer; }
-    .method-item.active { border-color: var(--primary); }
+    .method-item.active { border-color: var(--gold); }
     .method-item img { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; margin-bottom: 5px; }
     .method-item span { display: block; font-size: 0.8rem; font-weight: 600; }
 
     #player-section { position: fixed; inset: 0; background: #000; z-index: 10000; display: none; flex-direction: column; }
     .input-box { width: 100%; background: #111; border: 1px solid #333; padding: 16px; border-radius: 15px; color: #fff; margin-bottom: 12px; text-align: center; outline: none; }
-    .btn-pay { width: 100%; padding: 16px; border-radius: 15px; border: none; font-weight: 800; background: #fff; color: #000; cursor: pointer; }
+    .btn-pay { width: 100%; padding: 16px; border-radius: 15px; border: none; font-weight: 800; background: var(--gold); color: #000; cursor: pointer; }
   </style>
 </head>
 <body onclick="showWaterDrop(event)">
 
+<div id="particles-js"></div>
+
 <div id="lock-screen">
   <div class="lock-box">
-    <h2>ভেরিফিকেশন</h2>
+    <h2 style="color: var(--gold);">ভেরিফিকেশন</h2>
     <p style="color:#aaa; margin: 10px 0;">১টি অ্যাডে ক্লিক করলে সাইট খুলবে</p>
-    <h1 id="ads-count" style="font-size: 4.5rem; color: var(--primary);">১</h1>
+    <h1 id="ads-count" style="font-size: 4.5rem; color: var(--gold);">১</h1>
     <button id="ad-btn" onclick="handleLockAds()">ক্লিক করুন</button>
   </div>
 </div>
@@ -116,8 +131,7 @@
 
 <div id="payment-page">
   <button onclick="closePayment()" style="color:#fff; background:none; border:none; font-size: 1.2rem;"><i class="fas fa-arrow-left"></i> ফিরে যান</button>
-  
-  <h3 style="text-align: center; margin-top: 20px;">প্যাকেজ বেছে নিন</h3>
+  <h3 style="text-align: center; margin-top: 20px; color: var(--gold);">প্যাকেজ বেছে নিন</h3>
   <div class="plan-grid">
     <div class="plan-item active" onclick="selectPlan('১ মাস - ৪৪ টাকা', this)"><b>৪৪ ৳</b><br>১ মাস</div>
     <div class="plan-item" onclick="selectPlan('২ মাস - ৬৪ টাকা', this)"><b>৬৪ ৳</b><br>২ মাস</div>
@@ -140,21 +154,37 @@
     </div>
   </div>
 
-  <div style="background:#1c1c1e; padding:25px; border-radius:20px; text-align:center; border:1px solid #333; margin-bottom: 20px;">
+  <div style="background:#1c1c1e; padding:25px; border-radius:20px; text-align:center; border:1px solid var(--gold); margin-bottom: 20px;">
     <p id="methodName" style="color:var(--gold); font-weight: bold;">BKash Personal</p>
-    <h2 id="targetNum">লোড হচ্ছে...</h2>
-    <button onclick="copyNum()" style="color:var(--primary); background:none; border:none; margin-top: 10px; font-weight:bold;">নম্বর কপি করুন</button>
+    <h2 id="targetNum" style="color: #fff;">লোড হচ্ছে...</h2>
+    <button onclick="copyNum()" style="color:var(--gold); background:none; border:none; margin-top: 10px; font-weight:bold;">নম্বর কপি করুন</button>
   </div>
 
   <input type="number" id="uPhone" class="input-box" placeholder="আপনার পেমেন্ট নম্বর">
   <input type="text" id="uTrx" class="input-box" placeholder="TrxID দিন">
   <button onclick="submitPay()" class="btn-pay">রিকোয়েস্ট পাঠান</button>
-  
-  <div style="margin-top: 40px; border-top: 1px solid #333; padding-top: 25px;">
-    <input type="text" id="verifyTrx" class="input-box" placeholder="এপ্রুভড TrxID দিন">
-    <button onclick="verifyUnlock()" style="width: 100%; padding: 16px; border-radius: 15px; border: none; font-weight: 800; background: var(--primary); color: #fff;">ভিডিও আনলক করুন</button>
-  </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+  particlesJS("particles-js", {
+    "particles": {
+      "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
+      "color": { "value": "#FFD700" }, /* হলুদ রঙ */
+      "shape": { "type": "circle" },
+      "opacity": { "value": 0.6, "random": true },
+      "size": { "value": 3, "random": true },
+      "line_linked": { "enable": true, "distance": 150, "color": "#FFD700", "opacity": 0.4, "width": 1.5 }, /* হলুদ জাল */
+      "move": { "enable": true, "speed": 2.5, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+    },
+    "interactivity": {
+      "detect_on": "canvas",
+      "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+      "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 1 } } }
+    },
+    "retina_detect": true
+  });
+</script>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -172,7 +202,6 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // --- ভিজিটর কাউন্ট ট্র্যাকিং ---
   async function trackVisitor() {
     const statsRef = doc(db, "site_stats", "visitors");
     try {
@@ -234,18 +263,15 @@
   window.filterVideos = () => {
     const input = document.getElementById('searchInput').value.toLowerCase();
     const cards = document.getElementsByClassName('card');
-    
     for (let card of cards) {
       const title = card.querySelector('.card-info').innerText.toLowerCase();
-      if (title.includes(input)) {
-        card.style.display = "";
-      } else {
-        card.style.display = "none";
-      }
+      if (title.includes(input)) card.style.display = "";
+      else card.style.display = "none";
     }
   };
 
-  onSnapshot(query(collection(db, "videos"), orderBy("episodeNo", "asc")), (snap) => {
+  // ১. সর্টিং আপডেট: "desc" ব্যবহার করা হয়েছে
+  onSnapshot(query(collection(db, "videos"), orderBy("episodeNo", "desc")), (snap) => {
     document.getElementById("videoGrid").innerHTML = snap.docs.map(v => `
         <div class="card" onclick="handleVideoClick('${v.id}', '${v.data().url}')">
             <div class="episode-badge">এপিসোড: ${v.data().episodeNo || '0'}</div>
@@ -303,4 +329,4 @@
   updatePayUI();
 </script>
 </body>
-  </html>
+    </html>
